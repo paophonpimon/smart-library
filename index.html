@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Smart Library — หน้าแรก</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=K2D:wght@100..800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="home.css"/>
+  
+  <!-- PapaParse -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
+  <script src="home.js" defer></script>
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar__brand">
+      <img src="img/logo.png" alt="Smart Library" class="logo">
+      <span class="brand-text">Smart Library</span>
+    </div>
+    <nav class="topbar__menu">
+      <a href="#" class="active">หน้าแรก</a>
+      <a href="#" onclick="alert('กำลังพัฒนา');return false;">ค้นหาหนังสือ</a>
+      <a href="#" onclick="alert('กำลังพัฒนา');return false;">เกี่ยวกับ</a>
+    </nav>
+  </header>
+
+  <!-- HERO BANNER -->
+  <section class="hero">
+    <div class="hero__slides" id="heroSlides">
+      <!-- สไลด์จะถูกเติมจาก JS -->
+    </div>
+
+    <div class="hero__overlay">
+      <h1 id="heroTitle">ปกเว็บ สไลด์รูปโชว์</h1>
+      <p class="hero__subtitle">เลื่อนซ้าย/ขวา หรือรออัตโนมัติ</p>
+      <div class="hero__controls">
+        <button id="prevHero" aria-label="ก่อนหน้า">‹</button>
+        <button id="nextHero" aria-label="ถัดไป">›</button>
+      </div>
+    </div>
+
+    <div class="hero__dots" id="heroDots"></div>
+  </section>
+
+  <!-- SECTIONS -->
+  <main id="sections">
+    
+  </main>
+
+  <footer class="foot">
+    © <span id="year"></span> Smart Library · หนังสือพูดได้
+  </footer>
+</body>
+</html>

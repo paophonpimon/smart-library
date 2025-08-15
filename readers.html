@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ยอดนักอ่าน | Smart Library</title>
+
+  <!-- ฟอนต์ / โครง topbar ใช้ชุดเดียวกับหน้าอื่น -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=K2D:wght@100..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="readers.css?v=1">
+
+  <!-- PapaParse โหลดข้อมูลจาก Google Sheets -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
+  <script src="readers.js?v=1" defer></script>
+</head>
+<body class="page-leaderboard">
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar__brand">
+      <img src="img/logo.png" alt="Smart Library" class="logo">
+      <span class="brand-text">Smart Library</span>
+    </div>
+    <nav class="topbar__menu">
+      <a href="home.html">หน้าแรก</a>
+      <a href="cat.html">ค้นหาหนังสือ</a>
+      <a class="active" href="readers.html">ยอดนักอ่าน</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <h1 id="page-title">ยอดนักอ่าน</h1>
+    <div class="subtitle">จัดอันดับผู้อ่านตามจำนวนเล่มและเวลาฟัง</div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <label class="pill">ระดับชั้น
+        <select id="grade">
+          <option value="all">ทั้งหมด</option>
+          <option value="ม.1">ม.1</option>
+          <option value="ม.2">ม.2</option>
+          <option value="ม.3">ม.3</option>
+          <option value="ม.4">ม.4</option>
+          <option value="ม.5">ม.5</option>
+          <option value="ม.6">ม.6</option>
+        </select>
+      </label>
+      <input id="q" type="search" placeholder="ค้นหาชื่อ/ห้อง" />
+      <div class="spacer"></div>
+      <button id="viewCard"  class="btn">แบบการ์ด</button>
+      <button id="viewTable" class="btn btn-ghost">แบบตาราง</button>
+      <a id="btnPrint" class="btn btn-ghost" href="#">พิมพ์</a>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat"><div class="num" id="stat-people">-</div><div class="lbl">จำนวนนักอ่าน</div></div>
+      <div class="stat"><div class="num" id="stat-books">-</div><div class="lbl">เล่มทั้งหมด</div></div>
+      <div class="stat"><div class="num" id="stat-min">-</div><div class="lbl">เวลาฟังรวม (นาที)</div></div>
+      <div class="stat"><div class="num" id="stat-update">-</div><div class="lbl">อัปเดตล่าสุด</div></div>
+    </div>
+
+    <!-- Leaderboard (การ์ด) -->
+    <section id="grid" class="lb-grid" aria-live="polite"></section>
+
+    <!-- Table view -->
+    <section id="tableWrap" class="lb-table-wrap" hidden>
+      <table>
+        <thead><tr>
+          <th>#</th><th>ชื่อ</th><th>ชั้น/ห้อง</th><th>เล่ม</th><th>เวลาฟัง (นาที)</th><th>เหรียญ</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </section>
+
+    <section id="error" class="err" hidden></section>
+  </main>
+</body>
+</html>

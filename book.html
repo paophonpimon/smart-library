@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>หนังสือพูดได้ | Smart Library</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=K2D:wght@100..800&display=swap" rel="stylesheet">
+
+  <!-- PapaParse -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
+
+  <!-- ใช้สไตล์ topbar เดียวกับหน้าอื่น -->
+  <link rel="stylesheet" href="home.css">
+  <!-- สไตล์ของหน้ารายละเอียด -->
+  <link rel="stylesheet" href="style.css?v=4">
+
+  <!-- สคริปต์หลักของหน้ารายละเอียด -->
+  <script src="script.js?v=build14" defer></script>
+</head>
+<body class="page-detail">
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar__brand">
+      <img src="img/logo.png" alt="Smart Library" class="logo">
+      <span class="brand-text">Smart Library</span>
+    </div>
+    <nav class="topbar__menu">
+      <a href="index.html" class="active">หน้าแรก</a>
+      <a href="#" onclick="alert('กำลังพัฒนา');return false;">ค้นหาหนังสือ</a>
+      <a href="#" onclick="alert('กำลังพัฒนา');return false;">เกี่ยวกับ</a>
+    </nav>
+  </header>
+
+  <!-- Breadcrumb -->
+  <nav class="crumbs">
+    <a href="index.html">หน้าแรก</a>
+    <span class="divider">›</span>
+    <a id="crumbCat" href="cat.html">หมวด</a>
+    <span class="divider">›</span>
+    <span id="crumbTitle">ชื่อหนังสือ</span>
+  </nav>
+
+  <main class="container">
+    <!-- กล่องรายละเอียดหนังสือ -->
+    <section class="book" id="book-section" style="display:none">
+      <div id="catBar" class="category-bar" aria-hidden="true"></div>
+      <img id="cover" class="cover" alt="ปกหนังสือ"/>
+      <div class="meta">
+        <p><strong>ชื่อหนังสือ:</strong> <span id="title"></span></p>
+        <p><strong>ผู้แต่ง:</strong> <span id="author"></span></p>
+        <p><strong>คำอธิบาย:</strong> <span id="description"></span></p>
+
+        <div class="audio">
+          <h2>เสียงบรรยายหนังสือ</h2>
+          <audio id="audio" controls autoplay muted playsinline preload="auto">
+            เบราว์เซอร์ของคุณไม่รองรับการเล่นเสียง
+          </audio>
+        </div>
+
+        <div class="chips">
+          <span class="chip primary"><span class="dot"></span> <span id="catChip">หมวด 000</span></span>
+          <!--<span class="chip star" id="scoreChip">★★★★★</span>-->
+        </div>
+
+      </div>
+    </section>
+    <!-- Action bar -->
+    <div class="actions">
+      <a id="btnBackCat" class="btn">ดูหนังสือทั้งหมดในหมวดนี้</a>
+      <a id="btnOpenCat" class="btn btn-ghost" href="cat.html">ไปหน้า “ค้นหาหนังสือ”</a>
+      <div class="share">
+        <span>แชร์:</span>
+        <a id="shareLine" class="share-btn" target="_blank" rel="noopener">Line</a>
+        <a id="shareFb" class="share-btn" target="_blank" rel="noopener">Facebook</a>
+        <a id="shareCopy" class="share-btn" href="#">คัดลอกลิงก์</a>
+      </div>
+    </div>
+    <!-- แนะนำ -->
+    <section class="reco">
+      <h2 class="reco-title">หนังสือแนะนำ</h2>
+      <div id="reco-grid" class="reco-grid"></div>
+    </section>
+
+    <section id="debug" class="debug" style="display:none"></section>
+    <section id="error" class="err" style="display:none"></section>
+  </main>
+</body>
+</html>

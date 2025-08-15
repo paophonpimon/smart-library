@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Smart Library — รวมตามหมวด</title>
+
+  <!-- ฟอนต์ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=K2D:wght@100..800&display=swap" rel="stylesheet">
+
+  <!-- ใช้สไตล์ร่วม + สไตล์เฉพาะหน้านี้ (ให้โหลด home.css ก่อน, cat.css ทีหลัง) -->
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="cat.css">
+
+  <!-- PapaParse -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
+  <!-- สคริปต์ของหน้านี้ -->
+  <script src="cat.js" defer></script>
+</head>
+<body class="page-detail">
+  <header class="topbar">
+    <a href="home.html" class="topbar__brand">
+      <img src="img/logo.png" class="logo" alt="">
+      <span class="brand-text">Smart Library</span>
+    </a>
+    <nav class="topbar__menu">
+      <a href="home.html">หน้าแรก</a>
+      <a href="cat.html" class="active">ค้นหาหนังสือ</a>
+      <a href="#" onclick="alert('กำลังพัฒนา');return false;">เกี่ยวกับ</a>
+    </nav>
+  </header>
+
+  <main class="cat">
+    <div class="cat__titlebar">
+    <h1 id="catTitle">รวมหนังสือ</h1>
+    <span id="catBadge" class="cat-badge" style="display:none"></span>
+  </div>
+  <p id="catSub" class="cat__sub"></p>
+
+      <div class="cat__controls">
+        <input id="q" class="ctl ctl--input" placeholder="พิมพ์ค้นหา ชื่อหนังสือ/ผู้แต่ง…">
+        <select id="status" class="ctl">
+          <option value="">ทุกสถานะ</option>
+          <option value="1">ว่าง</option>
+          <option value="0">ยืม</option>
+          <option value="3">ซ่อม</option>
+        </select>
+        <select id="sort" class="ctl">
+          <option value="score">เรียง: คะแนนมาก → น้อย</option>
+          <option value="title">เรียง: ชื่อ A → Z</option>
+          <option value="author">เรียง: ผู้แต่ง A → Z</option>
+        </select>
+        <span id="count" class="cat__count">0 รายการ</span>
+      </div>
+    </section>
+
+    <section id="grid" class="grid"></section>
+    <nav id="pager" class="pager"></nav>
+
+    <section id="empty" class="cat__empty" style="display:none">ไม่พบบันทึกที่ตรงเงื่อนไข</section>
+    <section id="error" class="cat__empty" style="display:none">โหลดข้อมูลผิดพลาด</section>
+  </main>
+</body>
+</html>
