@@ -20,6 +20,30 @@
   <!-- สคริปต์หลักของหน้ารายละเอียด -->
   <script src="script.js?v=build14" defer></script>
 </head>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const btn   = document.getElementById('btnCats');
+  const group = btn?.closest('.nav-group');
+  if (!btn || !group) return;
+
+  // คลิกปุ่ม = เปิดเมนู (ค้างไว้)
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    group.classList.add('is-open');
+  });
+
+  // คลิกนอกเมนู = ปิด
+  document.addEventListener('click', function(e){
+    if (!group.contains(e.target)) group.classList.remove('is-open');
+  });
+
+  // คลิกลิงก์หมวดย่อยแล้วปิด (ก่อนนำทาง)
+  document.getElementById('catsMenu')?.addEventListener('click', function(e){
+    const a = e.target.closest('a');
+    if (a) group.classList.remove('is-open');
+  });
+});
+</script>
 <body class="page-detail">
   <!-- Topbar -->
   <header class="topbar">
@@ -29,7 +53,26 @@
     </div>
     <nav class="topbar__menu">
       <a href="index.html" class="active">หน้าแรก</a>
+      <!-- กลุ่ม: หมวดหนังสือ (เอาเมาส์ไปชี้แล้วโชว์ 000–900 พร้อมชื่อไทย) -->
+  <div class="nav-group">
+    <a href="#" class="nav-link has-caret" id="btnCats">หมวดหนังสือ</a>
+    <div class="nav-menu" role="menu" id="catsMenu">
+      <div class="nav-menu-grid">
+        <a href="cat.html?cat=000">000 / ทั่วไป</a>
+        <a href="cat.html?cat=100">100 / จิตวิทยา</a>
+        <a href="cat.html?cat=200">200 / ศาสนา</a>
+        <a href="cat.html?cat=300">300 / สังคมศาสตร์</a>
+        <a href="cat.html?cat=400">400 / ภาษา</a>
+        <a href="cat.html?cat=500">500 / วิทยาศาสตร์</a>
+        <a href="cat.html?cat=600">600 / เทคโนโลยี</a>
+        <a href="cat.html?cat=700">700 / ศิลปะ/นันทนาการ</a>
+        <a href="cat.html?cat=800">800 / วรรณกรรม</a>
+        <a href="cat.html?cat=900">900 / ภูมิศาสตร์/ประวัติศาสตร์</a>
+      </div>
+    </div>
+  </div>
       <a href="#" onclick="alert('กำลังพัฒนา');return false;">ค้นหาหนังสือ</a>
+      <a href="readers.html" class="nav-link">ยอดนักอ่าน</a>
       <a href="#" onclick="alert('กำลังพัฒนา');return false;">เกี่ยวกับ</a>
     </nav>
   </header>

@@ -50,7 +50,7 @@ function loadTab(tab){
 }
 function card(book){
   const code = getCatCode(book["เลขหมวดหมู่"]);
-  const href = `index.html?id=${encodeURIComponent(book["ลำดับ"])}&cat=${code}`;
+  const href = `book.html?id=${encodeURIComponent(book["ลำดับ"])}&cat=${code}`;
   const a = el("a", { className:"card", href, title: book["ชื่อหนังสือ"] || "" });
 
   const wrap = el("div", { style:"position:relative" });
@@ -84,10 +84,9 @@ function card(book){
   return a;
 }
 
-(function(){
+(async function(){
   const p = new URLSearchParams(location.search);
   const code = (p.get("cat") || "").toUpperCase();
-  const badgeEl = document.getElementById("catBadge");
 
   // ตั้งหัวเรื่องตามหมวด
   const title = document.getElementById("catTitle");
@@ -102,78 +101,80 @@ function card(book){
     title.textContent = "รวมหนังสือตามหมวด";
     sub.textContent   = "ระบุ ?cat=000,100,... หรือคลิกหมวดจากหน้าแรก";
   }
+
   // เลือกแท็บจากพารามิเตอร์
   let tab = null;
   if (code==="NEW") tab = "newbook";
   else if (code==="REC") tab = "rec";
   else if (/^\d{3}$/.test(code)) tab = code;
 
-  if (!tab){
-    q("#error").style.display = "block";
-    q("#error").textContent = "โปรดระบุ ?cat=000 … 900 / NEW / REC";
-    return;
-  }
-
-  const grid = q("#grid");
-  const empty = q("#empty");
-  const count = q("#count");
+  const grid   = q("#grid");
+  const empty  = q("#empty");
+  const count  = q("#count");
   const qInput = q("#q");
   const selStatus = q("#status");
-  const selSort = q("#sort");
-  const pager     = q("#pager"); 
+  const selSort   = q("#sort");
+  const pager     = q("#pager");
+  const btnSearch = q("#btnSearch");
 
   let rows = [];
   let current = [];
   let page = 1;
-  const PER = 24;  
+  const PER = 24;
+
+  function buildPager(maxPage){
+    if (!pager) return;
+    pager.innerHTML = "";
+    if (maxPage <= 1) return;
+
+    const btn = (label, target, opts={})=>{
+      const b = el("button", {className:"page-btn", textContent:label});
+      if (opts.disabled) b.disabled = true;
+      if (opts.active)   b.classList.add("active");
+      b.onclick = ()=>{ page = target; renderPage(); };
+      return b;
+    };
+
+    pager.appendChild(btn("‹", Math.max(1, page-1), {disabled: page===1}));
+    for (let i=1; i<=maxPage; i++){
+      pager.appendChild(btn(String(i), i, {active:i===page}));
+    }
+    pager.appendChild(btn("›", Math.min(maxPage, page+1), {disabled: page===maxPage}));
+  }
 
   function renderPage(){
-  const total = current.length;
-  const maxPage = Math.max(1, Math.ceil(total / PER));
-  page = Math.max(1, Math.min(page, maxPage));
+    const total = current.length;
+    const maxPage = Math.max(1, Math.ceil(total / PER));
+    page = Math.max(1, Math.min(page, maxPage));
 
-  const start = (page-1) * PER;
-  const end   = Math.min(start + PER, total);
+    const start = (page-1) * PER;
+    const end   = Math.min(start + PER, total);
 
-  grid.innerHTML = "";
-  current.slice(start, end).forEach(b => grid.appendChild(card(b)));
+    grid.innerHTML = "";
+    current.slice(start, end).forEach(b => grid.appendChild(card(b)));
 
-  count.textContent = total ? `${start+1}–${end} จาก ${total} รายการ` : "0 รายการ";
-  empty.style.display = total ? "none" : "block";
-  buildPager(maxPage);
-}
-
-function buildPager(maxPage){
-  if (!pager) return;
-  pager.innerHTML = "";
-  if (maxPage <= 1) return;
-
-  const btn = (label, target, opts={})=>{
-    const b = el("button", {className:"page-btn", textContent:label});
-    if (opts.disabled) b.disabled = true;
-    if (opts.active)   b.classList.add("active");
-    b.onclick = ()=>{ page = target; renderPage(); };
-    return b;
-  };
-
-  pager.appendChild(btn("‹", Math.max(1, page-1), {disabled: page===1}));
-  for (let i=1; i<=maxPage; i++){
-    pager.appendChild(btn(String(i), i, {active:i===page}));
+    count.textContent = total ? `${start+1}–${end} จาก ${total} รายการ` : "0 รายการ";
+    empty.style.display = total ? "none" : "block";
+    buildPager(maxPage);
   }
-  pager.appendChild(btn("›", Math.min(maxPage, page+1), {disabled: page===maxPage}));
-}
 
-  function apply(){
+  async function apply(){
     const kw = (qInput.value || "").trim().toLowerCase();
     const stWant = selStatus.value;
 
-    current = rows.filter(r=>{
-      const s = (r["ชื่อหนังสือ"]||"").toLowerCase() + " " + (r["ผู้แต่ง"]||"").toLowerCase();
-      if (kw && !s.includes(kw)) return false;
+    const matchRow = (r) => {
+      const hay = [
+        r["ชื่อหนังสือ"]||"", r["ผู้แต่ง"]||"", r["เลขหมวดหมู่"]||"", r["คำอธิบาย"]||""
+      ].join(" ").toLowerCase();
+      if (kw && !hay.includes(kw)) return false;
       if (stWant !== "" && String(r["สถานะ"]||"") !== stWant) return false;
       return true;
-    });
+    };
 
+    // กรองจากผลที่โหลดไว้
+    current = rows.filter(matchRow);
+
+    // เรียง
     if (selSort.value === "title"){
       current.sort((a,b)=> (a["ชื่อหนังสือ"]||"").localeCompare(b["ชื่อหนังสือ"]||""));
     }else if (selSort.value === "author"){
@@ -181,13 +182,30 @@ function buildPager(maxPage){
     }else{
       current.sort((a,b)=> Number(b["คะแนน"]||0) - Number(a["คะแนน"]||0));
     }
-    page = 1; // รีเซ็ตไปหน้าแรกเมื่อกรองหรือเรียง
+
+    page = 1; 
     renderPage();
   }
-  loadTab(tab).then(r=>{ rows = r; apply(); })
-              .catch(()=>{ const err=q("#error"); err.style.display="block"; err.textContent="โหลดข้อมูลไม่ได้"; });
 
-  qInput.addEventListener("input", apply);
+  // โหลดหมวด (ถ้ามี)
+  if (!tab){
+    q("#error").style.display = "block";
+    q("#error").textContent = "โปรดระบุ ?cat=000 … 900 / NEW / REC";
+  }else{
+    try{
+      rows = await loadTab(tab);
+    }catch(e){
+      q("#error").style.display = "block";
+      q("#error").textContent = "โหลดข้อมูลไม่ได้";
+      rows = [];
+    }
+    await apply();
+  }
+
+  // กด Enter / ปุ่มค้นหา / เปลี่ยนตัวกรอง
+  qInput.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); apply(); }});
+  btnSearch && btnSearch.addEventListener("click", apply);
+  qInput.addEventListener("input", ()=>{ if (!qInput.value) apply(); });
   selStatus.addEventListener("change", apply);
   selSort.addEventListener("change", apply);
 })();

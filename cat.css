@@ -62,3 +62,18 @@
 .page-detail .container{
   padding-top: 8px;
 }
+/* ปุ่มค้นหา */
+.ctl--btn{
+  font-weight:900; cursor:pointer;
+  padding:8px 16px; border-radius:12px;
+  background:linear-gradient(180deg,#fff,#f8fafc);
+  border:1px solid var(--border);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.ctl--btn:hover{ transform:translateY(-1px); box-shadow:0 2px 10px rgba(0,0,0,.06); }
+
+/* เพจจิ้ง */
+.pager{ display:flex; gap:8px; justify-content:center; margin:22px 0 40px; }
+.page-btn{ padding:8px 12px; border-radius:10px; border:1px solid var(--border); background:#fff; cursor:pointer; }
+.page-btn.active{ background:#111827; color:#fff; border-color:#111827; }
+.page-btn:disabled{ opacity:.4; cursor:not-allowed; }

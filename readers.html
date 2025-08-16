@@ -16,6 +16,30 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
   <script src="readers.js?v=1" defer></script>
 </head>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const btn   = document.getElementById('btnCats');
+  const group = btn?.closest('.nav-group');
+  if (!btn || !group) return;
+
+  // คลิกปุ่ม = เปิดเมนู (ค้างไว้)
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    group.classList.add('is-open');
+  });
+
+  // คลิกนอกเมนู = ปิด
+  document.addEventListener('click', function(e){
+    if (!group.contains(e.target)) group.classList.remove('is-open');
+  });
+
+  // คลิกลิงก์หมวดย่อยแล้วปิด (ก่อนนำทาง)
+  document.getElementById('catsMenu')?.addEventListener('click', function(e){
+    const a = e.target.closest('a');
+    if (a) group.classList.remove('is-open');
+  });
+});
+</script>
 <body class="page-leaderboard">
   <!-- Topbar -->
   <header class="topbar">
@@ -24,35 +48,44 @@
       <span class="brand-text">Smart Library</span>
     </div>
     <nav class="topbar__menu">
-      <a href="home.html">หน้าแรก</a>
-      <a href="cat.html">ค้นหาหนังสือ</a>
-      <a class="active" href="readers.html">ยอดนักอ่าน</a>
+      <a href="index.html" class="active">หน้าแรก</a>
+      <!-- กลุ่ม: หมวดหนังสือ (เอาเมาส์ไปชี้แล้วโชว์ 000–900 พร้อมชื่อไทย) -->
+  <div class="nav-group">
+    <a href="#" class="nav-link has-caret" id="btnCats">หมวดหนังสือ</a>
+    <div class="nav-menu" role="menu" id="catsMenu">
+      <div class="nav-menu-grid">
+        <a href="cat.html?cat=000">000 / ทั่วไป</a>
+        <a href="cat.html?cat=100">100 / จิตวิทยา</a>
+        <a href="cat.html?cat=200">200 / ศาสนา</a>
+        <a href="cat.html?cat=300">300 / สังคมศาสตร์</a>
+        <a href="cat.html?cat=400">400 / ภาษา</a>
+        <a href="cat.html?cat=500">500 / วิทยาศาสตร์</a>
+        <a href="cat.html?cat=600">600 / เทคโนโลยี</a>
+        <a href="cat.html?cat=700">700 / ศิลปะ/นันทนาการ</a>
+        <a href="cat.html?cat=800">800 / วรรณกรรม</a>
+        <a href="cat.html?cat=900">900 / ภูมิศาสตร์/ประวัติศาสตร์</a>
+      </div>
+    </div>
+  </div>
+      <a href="#" onclick="alert('กำลังพัฒนา');return false;">ค้นหาหนังสือ</a>
+      <a href="readers.html" class="nav-link">ยอดนักอ่าน</a>
+      <a href="#" onclick="alert('กำลังพัฒนา');return false;">เกี่ยวกับ</a>
     </nav>
   </header>
 
   <main class="wrap">
     <h1 id="page-title">ยอดนักอ่าน</h1>
-    <div class="subtitle">จัดอันดับผู้อ่านตามจำนวนเล่มและเวลาฟัง</div>
+    <div class="subtitle">จัดอันดับยอดนักอ่านตามจำนวนเล่มและแต้มสะสม</div>
 
     <!-- Controls -->
-    <div class="controls">
-      <label class="pill">ระดับชั้น
-        <select id="grade">
-          <option value="all">ทั้งหมด</option>
-          <option value="ม.1">ม.1</option>
-          <option value="ม.2">ม.2</option>
-          <option value="ม.3">ม.3</option>
-          <option value="ม.4">ม.4</option>
-          <option value="ม.5">ม.5</option>
-          <option value="ม.6">ม.6</option>
-        </select>
-      </label>
-      <input id="q" type="search" placeholder="ค้นหาชื่อ/ห้อง" />
-      <div class="spacer"></div>
-      <button id="viewCard"  class="btn">แบบการ์ด</button>
-      <button id="viewTable" class="btn btn-ghost">แบบตาราง</button>
-      <a id="btnPrint" class="btn btn-ghost" href="#">พิมพ์</a>
-    </div>
+  <div class="controls">
+    <input id="q" type="search" placeholder="ค้นหาชื่อ/ชั้น/ห้อง" />
+    <div class="spacer"></div>
+    <button id="viewCard"  class="btn">แบบการ์ด</button>
+    <button id="viewTable" class="btn btn-ghost">แบบตาราง</button>
+    <a id="btnPrint" class="btn btn-ghost" href="#">พิมพ์</a>
+  </div>
+
 
     <!-- Stats -->
     <div class="stats">
